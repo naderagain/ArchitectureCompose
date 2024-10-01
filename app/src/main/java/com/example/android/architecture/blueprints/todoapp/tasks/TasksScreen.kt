@@ -19,8 +19,10 @@ package com.example.android.architecture.blueprints.todoapp.tasks
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,6 +31,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.BottomAppBar
 import androidx.compose.material.Checkbox
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -37,6 +40,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Done
@@ -110,14 +114,6 @@ fun TasksScreen(
             modifier = Modifier.padding(paddingValues)
         )
 
-        // Check for user messages to display on the screen
-        uiState.userMessage?.let { message ->
-            val snackbarText = stringResource(message)
-            LaunchedEffect(scaffoldState, viewModel, message, snackbarText) {
-                scaffoldState.snackbarHostState.showSnackbar(snackbarText)
-                viewModel.snackbarMessageShown()
-            }
-        }
 
         // Check if there's a userMessage to show to the user
         val currentOnUserMessageDisplayed by rememberUpdatedState(onUserMessageDisplayed)
@@ -129,6 +125,50 @@ fun TasksScreen(
         }
     }
 }
+
+
+
+
+
+@Composable
+fun MyApp() {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Geeks fo Geeks") },
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = { /* Your action */ }) {
+                Icon(Icons.Filled.Add, contentDescription = "Add")
+            }
+        },
+        content = { paddingValues ->
+            // Main content with padding applied correctly
+            Box(modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()) {
+                Text("This is the Main Body of the Application", modifier = Modifier.align(Alignment.Center))
+            }
+        },
+        bottomBar = {
+            BottomAppBar {
+                Text("Bottom Bar")
+            }
+        }
+    )
+}
+
+
+
+
+
+
+
+
+
+
+
 
 @Composable
 private fun TasksContent(
