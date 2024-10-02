@@ -24,6 +24,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,7 +32,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomAppBar
+import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -127,7 +130,20 @@ fun TasksScreen(
 }
 
 
-
+@Composable
+fun BasicButtonExample() {
+    Button(
+        onClick = { /* Handle button click */ },
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(8.dp),
+        enabled = true,
+        contentPadding = PaddingValues(12.dp)
+    ) {
+        Text(text = "Click Me")
+    }
+}
 
 
 @Composable
@@ -150,6 +166,7 @@ fun MyApp() {
                 .fillMaxSize()) {
                 Text("This is the Main Body of the Application", modifier = Modifier.align(Alignment.Center))
             }
+            BasicButtonExample()
         },
         bottomBar = {
             BottomAppBar {
