@@ -54,6 +54,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -84,6 +85,33 @@ fun TasksScreen(
     viewModel: TasksViewModel = hiltViewModel(),
     scaffoldState: ScaffoldState = rememberScaffoldState()
 ) {
+
+
+    returnOriginalSaffold(
+        viewModel,
+        scaffoldState,
+        modifier,
+        openDrawer,
+        onAddTask,
+        onTaskClick
+    )
+    
+}
+
+
+
+@Composable
+fun returnOriginalSaffold(
+    viewModel: TasksViewModel = hiltViewModel(),
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    modifier: Modifier = Modifier,
+    openDrawer: () -> Unit ,
+    onAddTask: () -> Unit,
+    onTaskClick: (Task) -> Unit
+){
+
+
+    @OptIn(ExperimentalLifecycleComposeApi::class)
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -114,19 +142,18 @@ fun TasksScreen(
             onRefresh = viewModel::refresh,
             onTaskClick = onTaskClick,
             onTaskCheckedChange = viewModel::completeTask,
-            modifier = Modifier.padding(paddingValues).background(Color.Blue)
+            modifier = Modifier
+                .padding(paddingValues)
+                .background(Color.Blue)
         )
 
 
-        // Check if there's a userMessage to show to the user
-        val currentOnUserMessageDisplayed by rememberUpdatedState(onUserMessageDisplayed)
-        LaunchedEffect(userMessage) {
-            if (userMessage != 0) {
-                viewModel.showEditResultMessage(userMessage)
-                currentOnUserMessageDisplayed()
-            }
-        }
+
     }
+
+
+
+
 }
 
 
