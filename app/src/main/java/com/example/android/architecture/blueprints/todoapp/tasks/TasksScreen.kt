@@ -234,7 +234,7 @@ private fun TasksContent(
     ) {
         Column(
             modifier = modifier
-                .fillMaxSize()
+                
                 .padding(horizontal = dimensionResource(id = R.dimen.horizontal_margin))
                 .background(Color.Green)
         ) {
