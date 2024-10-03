@@ -114,7 +114,7 @@ fun TasksScreen(
             onRefresh = viewModel::refresh,
             onTaskClick = onTaskClick,
             onTaskCheckedChange = viewModel::completeTask,
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier.padding(paddingValues).background(Color.Blue)
         )
 
 
@@ -209,6 +209,7 @@ private fun TasksContent(
             modifier = modifier
                 .fillMaxSize()
                 .padding(horizontal = dimensionResource(id = R.dimen.horizontal_margin))
+                .background(Color.Green)
         ) {
             Text(
                 text = stringResource(currentFilteringLabel),
