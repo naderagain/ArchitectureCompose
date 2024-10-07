@@ -86,15 +86,27 @@ fun TasksScreen(
     scaffoldState: ScaffoldState = rememberScaffoldState()
 ) {
 
+    Row(verticalAlignment = Alignment.CenterVertically) {
+         Column {
+             returnOriginalSaffold(
+                 viewModel,
+                 scaffoldState,
+                 modifier,
+                 openDrawer,
+                 onAddTask,
+                 onTaskClick
+             )
 
-    returnOriginalSaffold(
-        viewModel,
-        scaffoldState,
-        modifier,
-        openDrawer,
-        onAddTask,
-        onTaskClick
-    )
+             BasicButtonExample()
+
+
+        }
+    }
+
+
+
+
+
     
 }
 
