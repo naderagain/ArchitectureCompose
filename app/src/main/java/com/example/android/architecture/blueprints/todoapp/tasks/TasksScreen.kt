@@ -1,19 +1,3 @@
-/*
- * Copyright 2022 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.example.android.architecture.blueprints.todoapp.tasks
 
 import androidx.annotation.DrawableRes
@@ -30,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,17 +26,13 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -59,7 +40,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
@@ -71,7 +51,6 @@ import com.example.android.architecture.blueprints.todoapp.tasks.TasksFilterType
 import com.example.android.architecture.blueprints.todoapp.tasks.TasksFilterType.COMPLETED_TASKS
 import com.example.android.architecture.blueprints.todoapp.util.LoadingContent
 import com.example.android.architecture.blueprints.todoapp.util.TasksTopAppBar
-import com.google.accompanist.appcompattheme.AppCompatTheme
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -85,44 +64,27 @@ fun TasksScreen(
     viewModel: TasksViewModel = hiltViewModel(),
     scaffoldState: ScaffoldState = rememberScaffoldState()
 ) {
-
-    Row(verticalAlignment = Alignment.CenterVertically) {
-         Column {
-             returnOriginalSaffold(
-                 viewModel,
-                 scaffoldState,
-                 modifier,
-                 openDrawer,
-                 onAddTask,
-                 onTaskClick
-             )
-
-             BasicButtonExample()
-
-
-        }
-    }
-
-
-
-
-
-    
+    // You can keep the structure of your TasksScreen as it is.
+    // No need for the button here anymore.
+    returnOriginalSaffold(
+        viewModel,
+        scaffoldState,
+        modifier,
+        openDrawer,
+        onAddTask,
+        onTaskClick
+    )
 }
-
-
 
 @Composable
 fun returnOriginalSaffold(
     viewModel: TasksViewModel = hiltViewModel(),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     modifier: Modifier = Modifier,
-    openDrawer: () -> Unit ,
+    openDrawer: () -> Unit,
     onAddTask: () -> Unit,
     onTaskClick: (Task) -> Unit
-){
-
-
+) {
     @OptIn(ExperimentalLifecycleComposeApi::class)
     Scaffold(
         scaffoldState = scaffoldState,
@@ -136,7 +98,7 @@ fun returnOriginalSaffold(
                 onRefresh = { viewModel.refresh() }
             )
         },
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.wrapContentHeight(),
         floatingActionButton = {
             FloatingActionButton(onClick = onAddTask) {
                 Icon(Icons.Filled.Add, stringResource(id = R.string.add_task))
@@ -144,30 +106,27 @@ fun returnOriginalSaffold(
         }
     ) { paddingValues ->
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-        TasksContent(
-            loading = uiState.isLoading,
-            tasks = uiState.items,
-            currentFilteringLabel = uiState.filteringUiInfo.currentFilteringLabel,
-            noTasksLabel = uiState.filteringUiInfo.noTasksLabel,
-            noTasksIconRes = uiState.filteringUiInfo.noTaskIconRes,
-            onRefresh = viewModel::refresh,
-            onTaskClick = onTaskClick,
-            onTaskCheckedChange = viewModel::completeTask,
+        Column(
             modifier = Modifier
                 .padding(paddingValues)
                 .background(Color.Blue)
-        )
-
-
-
+        ) {
+            // Add list content
+            TasksContent(
+                loading = uiState.isLoading,
+                tasks = uiState.items,
+                currentFilteringLabel = uiState.filteringUiInfo.currentFilteringLabel,
+                noTasksLabel = uiState.filteringUiInfo.noTasksLabel,
+                noTasksIconRes = uiState.filteringUiInfo.noTaskIconRes,
+                onRefresh = viewModel::refresh,
+                onTaskClick = onTaskClick,
+                onTaskCheckedChange = viewModel::completeTask
+            )
+            // Add button here
+            BasicButtonExample()
+        }
     }
-
-
-
-
 }
-
 
 @Composable
 fun BasicButtonExample() {
@@ -200,10 +159,15 @@ fun MyApp() {
         },
         content = { paddingValues ->
             // Main content with padding applied correctly
-            Box(modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()) {
-                Text("This is the Main Body of the Application", modifier = Modifier.align(Alignment.Center))
+            Box(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+            ) {
+                Text(
+                    "This is the Main Body of the Application",
+                    modifier = Modifier.align(Alignment.Center)
+                )
             }
             BasicButtonExample()
         },
@@ -214,16 +178,6 @@ fun MyApp() {
         }
     )
 }
-
-
-
-
-
-
-
-
-
-
 
 
 @Composable
@@ -246,7 +200,7 @@ private fun TasksContent(
     ) {
         Column(
             modifier = modifier
-                
+
                 .padding(horizontal = dimensionResource(id = R.dimen.horizontal_margin))
                 .background(Color.Green)
         ) {
@@ -325,122 +279,3 @@ private fun TasksEmptyContent(
         Text(stringResource(id = noTasksLabel))
     }
 }
-
-//@Preview
-//@Composable
-//private fun TasksContentPreview() {
-//    AppCompatTheme {
-//        Surface {
-//            TasksContent(
-//                loading = false,
-//                tasks = listOf(
-//                    Task(
-//                        title = "Title 1",
-//                        description = "Description 1",
-//                        isCompleted = false,
-//                        id = "ID 1"
-//                    ),
-//                    Task(
-//                        title = "Title 2",
-//                        description = "Description 2",
-//                        isCompleted = true,
-//                        id = "ID 2"
-//                    ),
-//                    Task(
-//                        title = "Title 3",
-//                        description = "Description 3",
-//                        isCompleted = true,
-//                        id = "ID 3"
-//                    ),
-//                    Task(
-//                        title = "Title 4",
-//                        description = "Description 4",
-//                        isCompleted = false,
-//                        id = "ID 4"
-//                    ),
-//                    Task(
-//                        title = "Title 5",
-//                        description = "Description 5",
-//                        isCompleted = true,
-//                        id = "ID 5"
-//                    ),
-//                ),
-//                currentFilteringLabel = R.string.label_all,
-//                noTasksLabel = R.string.no_tasks_all,
-//                noTasksIconRes = R.drawable.logo_no_fill,
-//                onRefresh = { },
-//                onTaskClick = { },
-//                onTaskCheckedChange = { _, _ -> },
-//            )
-//        }
-//    }
-//}
-
-//@Preview
-//@Composable
-//private fun TasksContentEmptyPreview() {
-//    AppCompatTheme {
-//        Surface {
-//            TasksContent(
-//                loading = false,
-//                tasks = emptyList(),
-//                currentFilteringLabel = R.string.label_all,
-//                noTasksLabel = R.string.no_tasks_all,
-//                noTasksIconRes = R.drawable.logo_no_fill,
-//                onRefresh = { },
-//                onTaskClick = { },
-//                onTaskCheckedChange = { _, _ -> },
-//            )
-//        }
-//    }
-//}
-//
-//@Preview
-//@Composable
-//private fun TasksEmptyContentPreview() {
-//    AppCompatTheme {
-//        Surface {
-//            TasksEmptyContent(
-//                noTasksLabel = R.string.no_tasks_all,
-//                noTasksIconRes = R.drawable.logo_no_fill
-//            )
-//        }
-//    }
-//}
-
-//@Preview
-//@Composable
-//private fun TaskItemPreview() {
-//    AppCompatTheme {
-//        Surface {
-//            TaskItem(
-//                task = Task(
-//                    title = "Title",
-//                    description = "Description",
-//                    id = "ID"
-//                ),
-//                onTaskClick = { },
-//                onCheckedChange = { }
-//            )
-//        }
-//    }
-//}
-//
-//@Preview
-//@Composable
-//private fun TaskItemCompletedPreview() {
-//    AppCompatTheme {
-//        Surface {
-//            TaskItem(
-//                task = Task(
-//                    title = "Title",
-//                    description = "Description",
-//                    isCompleted = true,
-//                    id = "ID"
-//                ),
-//                onTaskClick = { },
-//                onCheckedChange = { }
-//            )
-//        }
-//    }
-//}
